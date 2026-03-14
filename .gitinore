@@ -1,0 +1,33 @@
+# Maven编译文件
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEA配置
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VSCode配置
+.vscode/
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# 敏感配置（关键！不要提交API Key）
+application-local.yml
+application-prod.yml

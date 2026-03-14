@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: spring-ai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - spring-ai-network
+
+  app:
+    build: .
+    container_name: spring-ai-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY:-your-api-key-here}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - spring-ai-network
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    container_name: spring-ai-frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - spring-ai-network
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+
+networks:
+  spring-ai-network:
+    driver: bridge

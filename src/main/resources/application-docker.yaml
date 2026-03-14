@@ -1,0 +1,43 @@
+# Docker 环境配置
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+      timeout: 5000ms
+      connect-timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+          max-wait: 5000ms
+  
+  ai:
+    openai:
+      api-key: ${DASHSCOPE_API_KEY}
+      chat:
+        options:
+          model: qwen-max
+          temperature: 0.7
+          max-tokens: 4000
+
+# 应用配置
+app:
+  chat:
+    max-context-messages: 15
+    session-timeout-hours: 4
+    enable-typing-effect: true
+    typing-delay-ms: 30
+
+# 日志配置
+logging:
+  level:
+    com.example.demo: INFO
+    org.springframework.ai: WARN
+  file:
+    name: /app/logs/spring-ai-qwen.log
+    max-size: 50MB
+    max-history: 30
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
